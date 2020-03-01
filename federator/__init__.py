@@ -6,7 +6,10 @@ import argparse
 
 def init(args):
     args = vars(args)
-    federator.Federator(clientId=args['clientid'], clientSecret=args['clientsecret'])
+    federator.Federator(
+        clientId=args['clientid'],
+        clientSecret=args['clientsecret'],
+        scope="https://www.googleapis.com/auth/admin.directory.userschema")
 
 def schema_verify(args):
     args = vars(args)

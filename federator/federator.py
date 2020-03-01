@@ -14,6 +14,7 @@ import stat
 import sys
 from Crypto.Hash import SHA256
 
+
 class Federator(object):
     # we need multiple scopes, because we need to define a custom schema
     # before being able to add roles defined within that schema to a user
@@ -81,8 +82,8 @@ class Federator(object):
         self.service = build('admin', 'directory_v1', http=self.http)
 
 class User(Federator):
-    roleArnShape = re.compile('^arn:aws:iam::(\d{12}):role/(\w+)')
-    providerArnShape = re.compile('^arn:aws:iam::\d{12}:saml-provider/\w+')
+    roleArnShape = re.compile(r'^arn:aws:iam::(\d{12}):role/(\w+)')
+    providerArnShape = re.compile(r'^arn:aws:iam::\d{12}:saml-provider/\w+')
 
     patchShape = """
     {
@@ -265,7 +266,7 @@ class Schema(Federator):
     def exists(self):
         request = self.service.schemas().list(customerId=self.customerId)
         response = request.execute()
-        for schema in response['schemas']:
+        for schema in response.get('schemas',[]):
             if schema['schemaName'] == "AWS-SSO":
                 return True
 
